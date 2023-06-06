@@ -14,5 +14,6 @@ namespace varsity.Service.Dto_s
     {
         public string Name { get; set; }
         public Guid? DepartmentId { get; set; }
+        public string DepartmentName { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
+using AutoMapper.Internal.Mappers;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,20 +62,16 @@ namespace varsity.Service.Course_s
             }
         }
 
-        public async Task<PagedResultDto<CourseDto>> GetAsync(PagedAndSortedResultRequestDto input, Guid id)
+        public async Task<CourseDto> GetAsync(Guid id)
         {
-            try
+            var course = await _repository.GetAllIncluding(c => c.Department).FirstOrDefaultAsync(c => c.Id == id);
+            if (course == null)
             {
-                var query = _repository.GetAllIncluding(m => m.Department);
-                var result = new PagedResultDto<CourseDto>();
-                var res = query.Where(x => x.Id == id);
-                result.Items = ObjectMapper.Map<IReadOnlyList<CourseDto>>(query);
-                return await Task.FromResult(result);
-            } 
-            catch (Exception ex)
-            {
-                throw new Exception (ex.Message, ex);
+                throw new Exception($"Course with ID '{id}' not found.");
             }
+            var courseDto = ObjectMapper.Map<CourseDto>(course);
+
+            return courseDto;
         }
 
         public Task<CourseDto> UpdateAsync(CourseDto input)

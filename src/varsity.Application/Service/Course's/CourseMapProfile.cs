@@ -23,5 +23,6 @@ namespace varsity.Service.Course_s
             CreateMap<CourseDto, Course>()
                 .ForMember(e => e.Id, d => d.Ignore());
         }
+
     }
 }

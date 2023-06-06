@@ -14,7 +14,7 @@ namespace varsity.Service.Course_s
         Task<CourseDto> CreateAsync(CourseDto input);
         Task<CourseDto> UpdateAsync(CourseDto input);
         Task<PagedResultDto<CourseDto>> GetAllAsync(PagedAndSortedResultRequestDto input);
-        Task<PagedResultDto<CourseDto>>GetAsync(PagedAndSortedResultRequestDto input, Guid id);
+        Task<CourseDto> GetAsync( Guid id);
         Task DeleteAsync(Guid id);
 
     }
