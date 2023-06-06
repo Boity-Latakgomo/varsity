@@ -8,16 +8,16 @@ using varsity.Authorization.Users;
 using varsity.Domain;
 using varsity.Service.Dto_s;
 
-namespace varsity.Service.Student_s
+namespace varsity.Service.Lecturers
 {
-    internal class StudentMapProfile : Profile
+    public class LecturerMapProfile : Profile
     {
-        public StudentMapProfile()
+        public LecturerMapProfile()
         {
-            CreateMap<Student, StudentDto>()
+            CreateMap<Lecturer, LecturerDto>()
                 .ForMember(x => x.UserId, m => m.MapFrom(x => x.User != null ? x.User.Id : (long?)null));
 
-            CreateMap<StudentDto, User>()
+            CreateMap<LecturerDto, User>()
                 .ForMember(x => x.Name, m => m.MapFrom(x => x.Name))
                 .ForMember(x => x.PhoneNumber, m => m.MapFrom(x => x.PhoneNumber))
                 .ForMember(x => x.EmailAddress, m => m.MapFrom(x => x.EmailAddress))
@@ -26,11 +26,12 @@ namespace varsity.Service.Student_s
                 .ForMember(x => x.Surname, m => m.MapFrom(x => x.Surname))
                 .ForMember(x => x.UserName, m => m.MapFrom(x => x.Name + x.Surname.Substring(0, 4)));
 
-            CreateMap<StudentDto, User>()
+            CreateMap<LecturerDto, User>()
                 .ForMember(e => e.Id, d => d.Ignore());
 
-            CreateMap<StudentDto, Student>()
+            CreateMap<LecturerDto, Lecturer>()
                 .ForMember(e => e.Id, d => d.Ignore());
         }
     }
 }
+

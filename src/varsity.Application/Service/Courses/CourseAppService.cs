@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using AutoMapper.Internal.Mappers;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +25,6 @@ namespace varsity.Service.Course_s
             _repository = repository;
             _department = department;
         }
-
-
-
-
 
 
         public  async Task<CourseDto> CreateAsync(CourseDto input)

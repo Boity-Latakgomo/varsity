@@ -17,6 +17,7 @@ namespace varsity.EntityFrameworkCore
         public DbSet<Lecturer> Lecturers { get; set; }  
         public DbSet<Module> Modules { get; set; }
         public DbSet<LecturerModule> LecturersModules { get; set; }
+        public DbSet<ModuleStudent> ModuleStudents { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Rating> Ratings { get; set; }   

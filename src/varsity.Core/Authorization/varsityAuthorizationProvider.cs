@@ -10,8 +10,12 @@ namespace varsity.Authorization
         {
             context.CreatePermission(PermissionNames.Pages_Users, L("Users"));
             context.CreatePermission(PermissionNames.Pages_Users_Activation, L("UsersActivation"));
-            context.CreatePermission(PermissionNames.Pages_Roles, L("Roles"));
+            context.CreatePermission(PermissionNames.Pages_Roles, L("Rolesd"));
             context.CreatePermission(PermissionNames.Pages_Tenants, L("Tenants"), multiTenancySides: MultiTenancySides.Host);
+            //custom
+            context.CreatePermission(PermissionNames.Service_Lecture, L("Lecture"));
+            context.CreatePermission(PermissionNames.Service_Student, L("Student"));
+
         }
 
         private static ILocalizableString L(string name)

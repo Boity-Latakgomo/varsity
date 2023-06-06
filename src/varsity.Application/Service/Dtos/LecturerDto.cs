@@ -10,7 +10,7 @@ using varsity.Domain;
 namespace varsity.Service.Dto_s
 {
     [AutoMap(typeof(Lecturer))]
-    public class LecturerDto: EntityDto<Guid>
+    public class LecturerDto: PersonDto
     {
         public string LecturerNumber { get; set; }
 

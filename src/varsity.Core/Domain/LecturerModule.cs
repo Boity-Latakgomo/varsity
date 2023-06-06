@@ -11,7 +11,9 @@ namespace varsity.Domain
     {
         //this is a foreign key from table of Lecture's
         public virtual Lecturer Lecturer { get; set; }
+        public virtual Module Module { get; set; }
 
-        public virtual Lecturer Module { get; set; }
+        public virtual Guid LecturerId { get; set; }
+        public virtual Guid ModuleId { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using varsity.EntityFrameworkCore;
 
@@ -11,9 +12,11 @@ using varsity.EntityFrameworkCore;
 namespace varsity.Migrations
 {
     [DbContext(typeof(varsityDbContext))]
-    partial class varsityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230606205807_M202306062257")]
+    partial class M202306062257
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -8,5 +8,11 @@
         public const string Pages_Users_Activation = "Pages.Users.Activation";
 
         public const string Pages_Roles = "Pages.Roles";
+
+
+        public const string Service_Lecture = "Lecture";
+        public const string Service_Student = "Student";
+
+
     }
 }

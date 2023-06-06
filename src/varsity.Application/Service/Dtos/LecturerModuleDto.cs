@@ -9,11 +9,11 @@ using varsity.Domain;
 
 namespace varsity.Service.Dto_s
 {
-    [AutoMap(typeof(Answer))]
-    public class AnswerDto: EntityDto<Guid>
+    [AutoMap(typeof(LecturerModule))]
+    public class LecturerModuleDto: EntityDto<Guid>
     {
-        public Guid? QuestionId { get; set; }
-        public String Text { get; set; }
-        public Guid? PersonId { get; set; }
+        public Guid? LecturerId { get; set; }
+
+        public Guid? ModuleId { get; set; }
     }
 }
