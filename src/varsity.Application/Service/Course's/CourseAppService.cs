@@ -64,14 +64,13 @@ namespace varsity.Service.Course_s
 
         public async Task<CourseDto> GetAsync(Guid id)
         {
-            var course = await _repository.GetAllIncluding(c => c.Department).FirstOrDefaultAsync(c => c.Id == id);
+            var course = await _repository.GetAllIncluding(c => c.Department).FirstOrDefaultAsync(c => c.Id == id);//we want a course associated with its department by course id
             if (course == null)
             {
                 throw new Exception($"Course with ID '{id}' not found.");
             }
-            var courseDto = ObjectMapper.Map<CourseDto>(course);
 
-            return courseDto;
+            return  ObjectMapper.Map<CourseDto>(course);
         }
 
         public Task<CourseDto> UpdateAsync(CourseDto input)
