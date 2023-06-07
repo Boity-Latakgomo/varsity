@@ -8,11 +8,14 @@ using System.Threading.Tasks;
 
 namespace varsity.Domain
 {
-    public class BookMark:FullAuditedEntity<Guid>
+    public class Bookmark:FullAuditedEntity<Guid>
 
     {
         public virtual Person Person { get; set; }
         public virtual Question Question { get; set; }
         public virtual Answer Answer { get; set; }
+        public virtual Guid AnswerId { get; set; }
+        public virtual Guid PersonId { get; set; }
+
     }
 }

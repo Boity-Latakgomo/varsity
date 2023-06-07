@@ -1618,13 +1618,13 @@ namespace varsity.Migrations
                     b.ToTable("Answers");
                 });
 
-            modelBuilder.Entity("varsity.Domain.BookMark", b =>
+            modelBuilder.Entity("varsity.Domain.Bookmark", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AnswerId")
+                    b.Property<Guid>("AnswerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
@@ -1648,7 +1648,7 @@ namespace varsity.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid?>("PersonId")
+                    b.Property<Guid>("PersonId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("QuestionId")
@@ -2015,8 +2015,8 @@ namespace varsity.Migrations
                     b.Property<Guid?>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("VoteTypeId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("VoteType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -2025,8 +2025,6 @@ namespace varsity.Migrations
                     b.HasIndex("PersonId");
 
                     b.HasIndex("QuestionId");
-
-                    b.HasIndex("VoteTypeId");
 
                     b.ToTable("Ratings");
                 });
@@ -2359,15 +2357,19 @@ namespace varsity.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("varsity.Domain.BookMark", b =>
+            modelBuilder.Entity("varsity.Domain.Bookmark", b =>
                 {
                     b.HasOne("varsity.Domain.Answer", "Answer")
                         .WithMany()
-                        .HasForeignKey("AnswerId");
+                        .HasForeignKey("AnswerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("varsity.Domain.Person", "Person")
                         .WithMany()
-                        .HasForeignKey("PersonId");
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("varsity.Domain.Question", "Question")
                         .WithMany()
@@ -2468,17 +2470,11 @@ namespace varsity.Migrations
                         .WithMany()
                         .HasForeignKey("QuestionId");
 
-                    b.HasOne("varsity.Domain.Rating", "VoteType")
-                        .WithMany()
-                        .HasForeignKey("VoteTypeId");
-
                     b.Navigation("Answer");
 
                     b.Navigation("Person");
 
                     b.Navigation("Question");
-
-                    b.Navigation("VoteType");
                 });
 
             modelBuilder.Entity("varsity.MultiTenancy.Tenant", b =>

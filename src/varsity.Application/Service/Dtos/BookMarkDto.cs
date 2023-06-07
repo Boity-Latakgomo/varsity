@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ using varsity.Domain;
 
 namespace varsity.Service.Dto_s
 {
-    public class BookMarkDto: EntityDto<Guid>
+    [AutoMap(typeof(Bookmark))]
+    public class BookmarkDto: EntityDto<Guid>
     {
         public Guid? PersonId { get; set; }
         public Guid? QuestionId { get; set; }

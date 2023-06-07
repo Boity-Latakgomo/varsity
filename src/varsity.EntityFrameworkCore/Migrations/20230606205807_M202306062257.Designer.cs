@@ -1621,7 +1621,7 @@ namespace varsity.Migrations
                     b.ToTable("Answers");
                 });
 
-            modelBuilder.Entity("varsity.Domain.BookMark", b =>
+            modelBuilder.Entity("varsity.Domain.Bookmark", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -2362,7 +2362,7 @@ namespace varsity.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("varsity.Domain.BookMark", b =>
+            modelBuilder.Entity("varsity.Domain.Bookmark", b =>
                 {
                     b.HasOne("varsity.Domain.Answer", "Answer")
                         .WithMany()

@@ -21,7 +21,7 @@ namespace varsity.EntityFrameworkCore
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Rating> Ratings { get; set; }   
-        public DbSet<BookMark> BookMarks { get; set; }  
+        public DbSet<Bookmark> BookMarks { get; set; }  
 
 
         
