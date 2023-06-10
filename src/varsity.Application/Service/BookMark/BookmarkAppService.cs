@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using varsity.Domain;
+using varsity.Domain.Enums;
 using varsity.Service.Dto_s;
 
 namespace varsity.Service.BookMark
@@ -17,68 +18,66 @@ namespace varsity.Service.BookMark
     {
         private readonly IRepository<Person, Guid> _personRepository;
         private readonly IRepository<Answer, Guid> _answerRepository;
+        private readonly IRepository<Question, Guid> _questionRepository;
         private readonly IRepository<Bookmark, Guid> _bookmarkRepository;
 
-        public BookmarkService(IRepository<Person, Guid> personRepository, IRepository<Answer, Guid> answerRepository, IRepository<Bookmark, Guid> bookmarkRepository)
+        public BookmarkService(IRepository<Person, Guid> personRepository, IRepository<Answer, Guid> answerRepository, IRepository<Bookmark, Guid> bookmarkRepository, IRepository<Question, Guid> questionRepository)
         {
             _personRepository = personRepository;
             _answerRepository = answerRepository;
             _bookmarkRepository = bookmarkRepository;
+            _questionRepository = questionRepository;
         }
 
         [HttpPost]
-        public async Task AddBookMark(BookmarkDto input)
+        public async Task<BookmarkDto> AddBookMark(BookmarkDto input)
         {
-            var person = await _personRepository.GetAsync((Guid)input.PersonId);
-            var answer = await _answerRepository.GetAsync((Guid)input.AnswerId);
-            if (person == null)
+            var person = await _personRepository.GetAsync(input.PersonId);
+
+            if (person == null) throw new ApplicationException("Person not found.");
+            var bookmark = ObjectMapper.Map<Bookmark>(input);
+            bookmark.Person = person;
+            if (input.Type == RefListBookmarkType.question)
             {
-                throw new ApplicationException("Person not found.");
+                bookmark.Question = await _questionRepository.GetAsync(input.QuestionId);
+            } else
+            {
+                bookmark.Answer = await _answerRepository.GetAsync(input.AnswerId);
             }
 
-            if (answer == null)
-            {
-                throw new ApplicationException("Answer not found.");
-            }
-
-            var bookmark = new Bookmark
-            {
-                PersonId = person.Id,
-                AnswerId = answer.Id
-            };
-
-            await _bookmarkRepository.InsertAsync(bookmark);
+            return ObjectMapper.Map<BookmarkDto>(await _bookmarkRepository.InsertAsync(bookmark));
         }
 
         [HttpGet]
         public async Task<List<BookmarkDto>> GetAllBookmarkAsync(Guid PersonId)
         {
             var bookmarks = await _bookmarkRepository
-        .GetAll()
-        .Include(b => b.Person)
-        .Include(b => b.Answer)
-        .Where(b => b.PersonId == PersonId)
-        .ToListAsync();
+                .GetAll()
+                .Include(b => b.Person)
+                .Include(b => b.Answer)
+                .Include(b => b.Question)
+                .Where(b => b.Person.Id == PersonId)
+                .ToListAsync();
 
             var bookmarkDtos = ObjectMapper.Map<List<BookmarkDto>>(bookmarks);
             return bookmarkDtos;
-
         }
 
         [HttpDelete]
         public async Task DeleteBookmark(Guid BookmarkId)
         {
 
-            var bookmarkSelected = await _bookmarkRepository.FirstOrDefaultAsync(pm => pm.Id == BookmarkId);
+            //var bookmarkSelected = await _bookmarkRepository.FirstOrDefaultAsync(pm => pm.Id == BookmarkId);
 
-            if (bookmarkSelected != null)
-            {
-                await _bookmarkRepository.DeleteAsync(bookmarkSelected);
-            }
-            else
-            {
-                throw new ApplicationException("bookmarkSelected not found.");
-            }
+            //if (bookmarkSelected != null)
+            //{
+            //    await _bookmarkRepository.DeleteAsync(bookmarkSelected);
+            //}
+            //else
+            //{
+            //    throw new ApplicationException("bookmarkSelected not found.");
+            //}
+            await _bookmarkRepository.DeleteAsync(BookmarkId);
         }
 
 

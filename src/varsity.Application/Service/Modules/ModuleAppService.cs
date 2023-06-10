@@ -30,8 +30,8 @@ namespace varsity.Service.Modules
 
         public async Task<ModuleDto> CreateAsync(ModuleDto input)
         {
-            var course = ObjectMapper.Map<Module>(input);
-            course.Course = await _course.GetAsync((Guid)input.CourseId);
+            var module = ObjectMapper.Map<Module>(input);
+            module.Course = await _course.GetAsync((Guid)input.CourseId);
             await _repository.InsertAsync(module);
             CurrentUnitOfWork.SaveChanges();
             return ObjectMapper.Map<ModuleDto>(module);

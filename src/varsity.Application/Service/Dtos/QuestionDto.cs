@@ -15,5 +15,7 @@ namespace varsity.Service.Dto_s
         public string Text { get; set; }
         public string Title { get; set; }
         public Guid? PersonId { get; set; }
+        public Guid? ModuleId { get; set; }
+
     }
 }

@@ -13,6 +13,11 @@ namespace varsity.Service.BookMark
     {
         public BookmarkMappingProfile()
         {
+            CreateMap<Bookmark, BookmarkDto>()
+                  .ForMember(e => e.QuestionId, m => m.MapFrom(e => e.Question != null ? e.Question.Id : (Guid?)null))
+                  .ForMember(e => e.PersonId, m => m.MapFrom(e => e.Person != null ? e.Person.Id : (Guid?)null))
+                  .ForMember(e => e.AnswerId, m => m.MapFrom(e => e.Answer != null ? e.Answer.Id : (Guid?)null));
+
             CreateMap<BookmarkDto, Bookmark>()
                 .ForMember(e => e.Id, d => d.Ignore());
         }

@@ -17,23 +17,23 @@ namespace varsity.Service.Ratings
     {
 
         private readonly IRepository<Rating, Guid> _repository;
-        private readonly IRepository<Person, Guid> _person;
-        private readonly IRepository<Question, Guid> _question;
-        private readonly IRepository<Answer, Guid> _answer;
+        private readonly IRepository<Person, Guid> _personRepository;
+        private readonly IRepository<Question, Guid> _questionRepository;
+        private readonly IRepository<Answer, Guid> _answerRepository;
 
-        public RatingAppService(IRepository<Rating, Guid> repository, IRepository<Person, Guid> person, IRepository<Question, Guid> question, IRepository<Answer, Guid> answer)
+        public RatingAppService(IRepository<Rating, Guid> repository, IRepository<Person, Guid> person, IRepository<Question, Guid> question, IRepository<Answer, Guid> answerRepository)
         {
             _repository = repository;
-            _person = person;
-            _question = question;
-            _answer = answer;
+            _personRepository = person;
+            _questionRepository = question;
+            _answerRepository = answerRepository;
         }
 
         public async Task<RatingDto> CreateAsync(RatingDto input)
         {
             var rating = ObjectMapper.Map<Rating>(input);
-            rating.Person = await _person.GetAsync((Guid)input.PersonId);
-            rating.Answer = await _answer.GetAsync((Guid)input.AnswerId);
+            rating.Person = await _personRepository.GetAsync((Guid)input.PersonId);
+            rating.Answer = await _answerRepository.GetAsync((Guid)input.AnswerId);
             await _repository.InsertAsync(rating);
             CurrentUnitOfWork.SaveChanges();
             return ObjectMapper.Map<RatingDto>(rating);

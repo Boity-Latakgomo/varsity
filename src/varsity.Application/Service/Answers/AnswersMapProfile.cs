@@ -17,7 +17,8 @@ namespace varsity.Service.Answers
                   //we first check if Department in Course is not null. If not null we assign Department.Id to DepartmentId in Course.
                   //else its gonna return 000...if its null instead of breaking
                   .ForMember(e => e.PersonId, m => m.MapFrom(e => e.Person != null ? e.Person.Id : (Guid?)null))
-                  .ForMember(e => e.QuestionId, m => m.MapFrom(e => e.Question != null ? e.Question.Id : (Guid?)null));
+                  .ForMember(e => e.QuestionId, m => m.MapFrom(e => e.Question != null ? e.Question.Id : (Guid?)null))
+                  .ForMember(e => e.QuestionText, m => m.MapFrom(e => e.Question != null ? e.Question.Text : (string?)null));
 
             //ignoring any types of id so there wont be any issues or break during your host when fetching data from the Db
             CreateMap<AnswerDto, Answer>()

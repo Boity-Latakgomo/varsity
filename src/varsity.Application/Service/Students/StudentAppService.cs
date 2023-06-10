@@ -16,18 +16,23 @@ namespace varsity.Service.Student_s
     public class StudentAppService:ApplicationService, IStudentAppService
     {
         private readonly IRepository<Student, Guid> _studentRepository;
+        private readonly IRepository<Course, Guid> _courseRepository;
         private readonly UserManager _userManager;
 
-        public StudentAppService(IRepository<Student, Guid> studentRepository, UserManager userManager)
+        public StudentAppService(IRepository<Student, Guid> studentRepository, UserManager userManager, IRepository<Course, Guid> courseRepository)
         {
             _studentRepository = studentRepository;
             _userManager = userManager;
+            _courseRepository = courseRepository;
         }
 
         public async Task<StudentDto> CreateAsync(StudentDto input)
         {
             var student = ObjectMapper.Map<Student>(input);
+
             student.User = await CreateUser(input);//creating a user before creating a student
+            student.Course = await _courseRepository.GetAsync(input.CourseId);
+
             return ObjectMapper.Map<StudentDto>( await _studentRepository.InsertAsync(student));
         }
 

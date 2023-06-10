@@ -10,7 +10,8 @@ namespace varsity.Domain
     public class Answer: FullAuditedEntity<Guid>
     {
         public virtual Question Question { get; set; }
-        public virtual string Text { get; set; }
         public virtual Person Person { get; set; }
+        public virtual string Text { get; set; }
+        public virtual string Test { get; set; }
     }
 }

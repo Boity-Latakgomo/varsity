@@ -11,6 +11,24 @@
     <Compile Remove="Migrations\20180726102624_Upgrade_ABP_380.cs" />
     <Compile Remove="Migrations\20180927062408_test.cs" />
     <Compile Remove="Migrations\20190111071724_Upgraded_To_Abp_v4_1_0.cs" />
+    <Compile Remove="Migrations\20230608130738_M202306081507.cs" />
+    <Compile Remove="Migrations\20230608130738_M202306081507.Designer.cs" />
+    <Compile Remove="Migrations\20230608131050_M202306081510.cs" />
+    <Compile Remove="Migrations\20230608131050_M202306081510.Designer.cs" />
+    <Compile Remove="Migrations\20230608131214_M202306081512.cs" />
+    <Compile Remove="Migrations\20230608131214_M202306081512.Designer.cs" />
+    <Compile Remove="Migrations\20230608131310_M202306081513.cs" />
+    <Compile Remove="Migrations\20230608131310_M202306081513.Designer.cs" />
+    <Compile Remove="Migrations\20230608131414_M202306081514.cs" />
+    <Compile Remove="Migrations\20230608131414_M202306081514.Designer.cs" />
+    <Compile Remove="Migrations\20230608131530_M202306081515.cs" />
+    <Compile Remove="Migrations\20230608131530_M202306081515.Designer.cs" />
+    <Compile Remove="Migrations\20230608132424_M202306081522.cs" />
+    <Compile Remove="Migrations\20230608132424_M202306081522.Designer.cs" />
+    <Compile Remove="Migrations\20230608132656_M202306081526.cs" />
+    <Compile Remove="Migrations\20230608132656_M202306081526.Designer.cs" />
+    <Compile Remove="Migrations\20230608133034_M202306081530.cs" />
+    <Compile Remove="Migrations\20230608133034_M202306081530.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.3" />

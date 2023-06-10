@@ -1606,6 +1606,9 @@ namespace varsity.Migrations
                     b.Property<Guid?>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Test")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
@@ -1618,13 +1621,10 @@ namespace varsity.Migrations
                     b.ToTable("Answers");
                 });
 
-            modelBuilder.Entity("varsity.Domain.Bookmark", b =>
+            modelBuilder.Entity("varsity.Domain.AnswerQ", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AnswerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
@@ -1651,8 +1651,59 @@ namespace varsity.Migrations
                     b.Property<Guid>("PersonId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("AnswerQs");
+                });
+
+            modelBuilder.Entity("varsity.Domain.Bookmark", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AnswerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid?>("PersonId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("QuestionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("Type")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -1963,6 +2014,9 @@ namespace varsity.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<Guid?>("ModuleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PersonId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1973,6 +2027,8 @@ namespace varsity.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ModuleId");
 
                     b.HasIndex("PersonId");
 
@@ -2357,19 +2413,34 @@ namespace varsity.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("varsity.Domain.Bookmark", b =>
+            modelBuilder.Entity("varsity.Domain.AnswerQ", b =>
                 {
-                    b.HasOne("varsity.Domain.Answer", "Answer")
-                        .WithMany()
-                        .HasForeignKey("AnswerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("varsity.Domain.Person", "Person")
                         .WithMany()
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("varsity.Domain.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("varsity.Domain.Bookmark", b =>
+                {
+                    b.HasOne("varsity.Domain.Answer", "Answer")
+                        .WithMany()
+                        .HasForeignKey("AnswerId");
+
+                    b.HasOne("varsity.Domain.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId");
 
                     b.HasOne("varsity.Domain.Question", "Question")
                         .WithMany()
@@ -2449,9 +2520,15 @@ namespace varsity.Migrations
 
             modelBuilder.Entity("varsity.Domain.Question", b =>
                 {
+                    b.HasOne("varsity.Domain.Module", "Module")
+                        .WithMany()
+                        .HasForeignKey("ModuleId");
+
                     b.HasOne("varsity.Domain.Person", "Person")
                         .WithMany()
                         .HasForeignKey("PersonId");
+
+                    b.Navigation("Module");
 
                     b.Navigation("Person");
                 });

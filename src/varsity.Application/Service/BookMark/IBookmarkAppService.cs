@@ -11,7 +11,7 @@ namespace varsity.Service.BookMark
  public interface IBookmarkAppService : IApplicationService
 {
 
-        public Task AddBookMark(BookmarkDto input);
+        public Task<BookmarkDto> AddBookMark(BookmarkDto input);
         public Task<List<BookmarkDto>> GetAllBookmarkAsync(Guid PersonId);
         public Task DeleteBookmark(Guid BookmarkId);
 

@@ -1,15 +1,13 @@
-﻿using Abp.Application.Services.Dto;
-using Abp.Application.Services;
+﻿using Abp.Application.Services;
+using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
-using AutoMapper.Internal.Mappers;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using varsity.Domain;
 using varsity.Service.Dto_s;
-using varsity.Service.Questions;
 
 namespace varsity.Service.Answers
 {
@@ -48,7 +46,7 @@ namespace varsity.Service.Answers
         {
             try
             {
-                var query = _repository.GetAllIncluding(m => m.Person);
+                var query = _repository.GetAllIncluding(m => m.Person, x=> x.Question);
                 var result = new PagedResultDto<AnswerDto>();
                 result.TotalCount = query.Count();
                 result.Items = ObjectMapper.Map<IReadOnlyList<AnswerDto>>(query);
@@ -60,16 +58,27 @@ namespace varsity.Service.Answers
             }
         }
 
-        //public async Task<QuestionDto> GetAsync(Guid id)
-        //{
-        //    var question = await _repository.GetAllIncluding(c => c.Person).FirstOrDefaultAsync(c => c.Id == id);//we want a course associated with its department by course id
-        //    if (question == null)
-        //    {
-        //        throw new Exception($"Course with ID '{id}' not found.");
-        //    }
+        public async Task<AnswerDto> GetAsync(Guid id)
+        {
+            var answers =  await _repository.GetAllIncluding(p => p.Person, q => q.Question).Where(a => a.Id == id).FirstOrDefaultAsync();
+            if (answers == null)
+            {
+                throw new Exception($"Answer with ID '{id}' not found.");
+            }
 
-        //    return ObjectMapper.Map<QuestionDto>(question);
-        //}
+            return ObjectMapper.Map<AnswerDto>(answers);
+        }
+
+        public async Task<List<AnswerDto>> GetByQuestionIdAsync(Guid questionId)
+        {
+            var answers = await _repository
+                .GetAllIncluding(p => p.Person, q => q.Question)
+                .Where(a => a.Question.Id == questionId)
+                .ToListAsync();
+
+            return ObjectMapper.Map<List<AnswerDto>>(answers);
+        }
+
 
         public Task<AnswerDto> UpdateAsync(AnswerDto input)
         {

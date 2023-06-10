@@ -15,7 +15,8 @@ namespace varsity.Service.Student_s
         public StudentMapProfile()
         {
             CreateMap<Student, StudentDto>()
-                .ForMember(x => x.UserId, m => m.MapFrom(x => x.User != null ? x.User.Id : (long?)null));
+                .ForMember(x => x.UserId, m => m.MapFrom(x => x.User != null ? x.User.Id : (long?)null))
+                .ForMember(x => x.CourseId, m => m.MapFrom(x => x.Course != null ? x.Course.Id : (Guid?)null));
 
             CreateMap<StudentDto, User>()
                 .ForMember(x => x.Name, m => m.MapFrom(x => x.Name))
@@ -31,6 +32,7 @@ namespace varsity.Service.Student_s
 
             CreateMap<StudentDto, Student>()
                 .ForMember(e => e.Id, d => d.Ignore());
+
         }
     }
 }

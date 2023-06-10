@@ -18,8 +18,8 @@ namespace varsity.Domain
 
         //public virtual RefList Gender { get; set; }
         public virtual User User { get; set; }
-        [NotMapped]
-        public virtual string[] RoleNames { get; set; }
+       // [NotMapped]
+        //public virtual string[] RoleNames { get; set; }
     }
 }
   

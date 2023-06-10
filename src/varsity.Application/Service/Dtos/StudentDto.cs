@@ -13,7 +13,7 @@ namespace varsity.Service.Dto_s
     public class StudentDto : PersonDto
     {
         public string StudentNumber { get; set; }
-        public Guid? CourseId { get; set; }
+        public Guid CourseId { get; set; }
         public int AcademicYear { get; set; }
     }
 }

@@ -20,6 +20,7 @@ namespace varsity.EntityFrameworkCore
         public DbSet<ModuleStudent> ModuleStudents { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
+        public DbSet<AnswerQ> AnswerQs { get; set; }
         public DbSet<Rating> Ratings { get; set; }   
         public DbSet<Bookmark> BookMarks { get; set; }  
 
