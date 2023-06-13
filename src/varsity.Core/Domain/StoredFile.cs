@@ -2,15 +2,20 @@
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations.Schema;
 using System;
+using varsity.Domain;
+using Abp.Domain.Entities.Auditing;
 
-namespace HomeForHope.Services.StoredFileService.Dto
+namespace varsity.Domain
 {
-    public class StoredFile : Entity<Guid>
+    public class StoredFile : FullAuditedEntity<Guid>
     {
-        [NotMapped]
-        public virtual IFormFile File { get; set; }
-        public virtual string FileName { get; set; }
+        
+        public virtual string Name { get; set; }
+        public virtual string Description { get; set; }
         public virtual string FileType { get; set; }
+        public virtual Byte[] Data { get; set; }
+
+        public virtual Lecturer Lecturer { get; set; }
     }
 
 }

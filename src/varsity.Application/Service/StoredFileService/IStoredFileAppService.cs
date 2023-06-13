@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeForHope.Services.StoredFileService
+namespace varsity.Services.StoredFileService
 {
     public interface IStoredFileAppService : IApplicationService
     {

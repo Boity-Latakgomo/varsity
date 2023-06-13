@@ -2120,6 +2120,55 @@ namespace varsity.Migrations
                     b.ToTable("Ratings");
                 });
 
+            modelBuilder.Entity("varsity.Domain.StoredFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("Data")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid?>("LecturerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LecturerId");
+
+                    b.ToTable("StoredFiles");
+                });
+
             modelBuilder.Entity("varsity.Domain.StudentPool", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2622,6 +2671,15 @@ namespace varsity.Migrations
                     b.Navigation("Person");
 
                     b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("varsity.Domain.StoredFile", b =>
+                {
+                    b.HasOne("varsity.Domain.Lecturer", "Lecturer")
+                        .WithMany()
+                        .HasForeignKey("LecturerId");
+
+                    b.Navigation("Lecturer");
                 });
 
             modelBuilder.Entity("varsity.MultiTenancy.Tenant", b =>

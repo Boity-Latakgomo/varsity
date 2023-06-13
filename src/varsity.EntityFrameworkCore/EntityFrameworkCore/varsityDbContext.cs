@@ -25,6 +25,7 @@ namespace varsity.EntityFrameworkCore
         public DbSet<Bookmark> BookMarks { get; set; }  
         public DbSet<StudentPool> StudentPools { get; set; }  
         public DbSet<LecturerPool> LecturePools { get; set; } 
+        public DbSet<StoredFile> StoredFiles { get; set; }
 
         
         public varsityDbContext(DbContextOptions<varsityDbContext> options)

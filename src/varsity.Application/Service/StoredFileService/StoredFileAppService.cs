@@ -1,9 +1,7 @@
-﻿using Abp.Domain.Repositories;
-using Abp.UI;
-using AutoMapper;
-using HomeForHope.Services.StoredFileService;
-using HomeForHope.Services.StoredFileService.Dto;
-using Microsoft.AspNetCore.Http;
+﻿using Abp.Application.Services;
+using Abp.Dependency;
+using Abp.Domain.Repositories;
+using AutoMapper.Internal.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,104 +9,74 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using varsity.Service.Helpers;
+using varsity.Domain;
+using varsity.Service.StoredFileService.Dto;
+using varsity.Services.StoredFileService;
 
-namespace varsity.Services.StoredFileService
+namespace varsity.Service.StoredFileService
 {
-    public class StoredFileAppService : ControllerBase, IStoredFileAppService
+    public class StoredFileAppService : ApplicationService, IStoredFileAppService
     {
-        const string BASE_FILE_PATH = "App_Data/Images";
-
+        private readonly IRepository<Lecturer, Guid> _lecturerRepository;
         private readonly IRepository<StoredFile, Guid> _storedFileRepository;
-        private readonly IMapper _mapper;
-        public StoredFileAppService(IRepository<StoredFile, Guid> storedFileRepository, IMapper mapper)
+
+        public StoredFileAppService(IRepository<Lecturer, Guid> lecturerRepository, IRepository<StoredFile, Guid> storedFileRepository)
         {
-            _mapper = mapper;
+            _lecturerRepository = lecturerRepository;
             _storedFileRepository = storedFileRepository;
         }
 
-        [HttpPost, Route("Upload")]
-        [Consumes("multipart/form-data")]
-        public async Task<StoredFile> CreateStoredFile([FromForm] StoredFileDto input)
+        public async Task<StoredFileDto> UploadFile([FromForm] StoredFileDto form)
         {
-
-            if (!Utils.IsImage(input.File))
-                throw new ArgumentException("The file is not a valid image.");
-
-            var checkAvailability = await _storedFileRepository.FirstOrDefaultAsync(x => x.FileName == input.File.FileName);
-            var timestamp = DateTime.Now.ToString("yyyyMMddHHmmssfff");
-
-            var storedFile = _mapper.Map<StoredFile>(input);
-            storedFile.FileName = checkAvailability != null ? $"{timestamp}_{input.File.FileName}" : input.File.FileName;
-            storedFile.FileType = input.File.ContentType;
-
-            var filePath = $"{BASE_FILE_PATH}/{input.File.FileName}"; //png if it's an image
-
-            using (var fileStream = input.File.OpenReadStream())
+            var service = IocManager.Instance.Resolve<IRepository<StoredFile, Guid>>();
+            byte[] fileBytes = null;
+            using (var ms = new MemoryStream())
             {
-                await SaveFile(filePath, fileStream);
+                await form.File.CopyToAsync(ms);
+                fileBytes = ms.ToArray();
             }
-            var test = _storedFileRepository.InsertAsync(storedFile);
 
-            return await _storedFileRepository.InsertAsync(storedFile);
+            var lecturer = await _lecturerRepository.FirstOrDefaultAsync(form.LecturerId);
 
-        }
-
-        private async Task SaveFile(string filePath, Stream stream)
-        {
-            using (var fs = new FileStream(filePath, FileMode.Create))
+            var file = new StoredFile
             {
-                await stream.CopyToAsync(fs);
-            }
-        }
-
-        
-
-        [HttpGet]
-        public async Task<IActionResult> GetStoredFile(Guid id)
-        {
-
-            var storedFile = await _storedFileRepository.FirstOrDefaultAsync(x => x.Id == id);
-            if (storedFile == null)
-                //return Content("filename not present");
-                throw new UserFriendlyException("File not found");
-
-            var path = Path.Combine(
-                           Directory.GetCurrentDirectory(),
-                           BASE_FILE_PATH, storedFile.FileName);
-
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
-            {
-                await stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            return File(memory, GetContentType(path), Path.GetFileName(path));
-
-        }
-
-        private string GetContentType(string path)
-        {
-            var types = GetMimeTypes();
-            var ext = Path.GetExtension(path).ToLowerInvariant();
-            return types[ext];
-        }
-
-        private Dictionary<string, string> GetMimeTypes()
-        {
-            return new Dictionary<string, string>
-            {
-                {".txt", "text/plain"},
-                {".pdf", "application/pdf"},
-                {".doc", "application/vnd.ms-word"},
-                {".docx", "application/vnd.ms-word"},
-                {".xls", "application/vnd.ms-excel"},
-                {".png", "image/png"},
-                {".jpg", "image/jpeg"},
-                {".jpeg", "image/jpeg"},
-                {".gif", "image/gif"},
-                {".csv", "text/csv"}
+                Data = fileBytes,
+                Name = form.File.FileName,
+                FileType = form.File.ContentType,
             };
+
+            file.Lecturer = lecturer;
+
+            file = await service.InsertAsync(file);
+            var result = ObjectMapper.Map<StoredFileDto>(file);
+            return result;
+        }
+
+        public async Task<IActionResult> DownloadFile(Guid fileId)
+        {
+            var service = IocManager.Instance.Resolve<IRepository<StoredFile, Guid>>();
+            var file = await service.GetAsync(fileId);
+
+            if (file == null)
+            {
+                throw new ApplicationException("File Invalid!!!");
+            }
+
+            var stream = new MemoryStream(file.Data);
+
+            stream.Position = 0;
+
+            var contentType = file.FileType;
+            var fileExtension = Path.GetExtension(file.Name);
+
+            return new FileStreamResult(stream, contentType) { FileDownloadName = file.Name };
+        }
+
+        public async Task<List<StoredFileDto>> GetFilesByApplicantId()
+        {
+            var files = await _storedFileRepository.GetAllListAsync();
+            var result = ObjectMapper.Map<List<StoredFileDto>>(files);
+            return result;
         }
 
     }
