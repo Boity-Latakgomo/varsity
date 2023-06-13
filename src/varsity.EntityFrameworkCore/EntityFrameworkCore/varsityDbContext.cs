@@ -23,7 +23,8 @@ namespace varsity.EntityFrameworkCore
         public DbSet<AnswerQ> AnswerQs { get; set; }
         public DbSet<Rating> Ratings { get; set; }   
         public DbSet<Bookmark> BookMarks { get; set; }  
-
+        public DbSet<StudentPool> StudentPools { get; set; }  
+        public DbSet<LecturerPool> LecturePools { get; set; } 
 
         
         public varsityDbContext(DbContextOptions<varsityDbContext> options)
