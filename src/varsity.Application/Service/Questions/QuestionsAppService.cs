@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +29,18 @@ namespace varsity.Service.Questions
 
         public async Task<QuestionDto> CreateAsync(QuestionDto input)
         {
+            var userId = AbpSession.UserId;
+            if (userId == null)
+            {
+                throw new ApplicationException("User invalid");
+            }
+            var person = await _personRepository.FirstOrDefaultAsync(p => p.User.Id == userId);
+            if (userId == null)
+            {
+                throw new ApplicationException("Person invalid");
+            }
             var question = ObjectMapper.Map<Question>(input);
-            question.Person = await _personRepository.GetAsync((Guid)input.PersonId);
+            question.Person = await _personRepository.GetAsync(person.Id);
             question.Module = await _moduleRepository.GetAsync((Guid)input.ModuleId);
             await _repository.InsertAsync(question);
             CurrentUnitOfWork.SaveChanges();
@@ -57,6 +68,19 @@ namespace varsity.Service.Questions
             }
         }
 
+        public async Task<QuestionDto> GetAsync(Guid id)
+        {
+            var question = await _repository.GetAllIncluding(q => q.Person, q => q.Module)
+                .FirstOrDefaultAsync(q => q.Id == id);
+
+            if (question == null)
+            {
+                throw new Exception($"Question with ID '{id}' not found.");
+            }
+
+            return ObjectMapper.Map<QuestionDto>(question);
+        }
+
         public async Task<List<QuestionDto>> SearchAsync(QuestionSearchDto input)
         {
             var questions = await _repository.GetAllListAsync();
@@ -69,6 +93,19 @@ namespace varsity.Service.Questions
         public Task<QuestionDto> UpdateAsync(QuestionDto input)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<QuestionDto>> GetQuestionsForCourseAsync(Guid courseId)
+        {
+            var courseModules = await _moduleRepository.GetAllListAsync(module => module.Course.Id == courseId);
+
+            var moduleIds = courseModules.Select(module => module.Id).ToList();
+
+            var questions = await _repository.GetAllIncluding(question => question.Module, question => question.Person)
+                .Where(question => moduleIds.Contains(question.Module.Id))
+                .ToListAsync();
+
+            return ObjectMapper.Map<List<QuestionDto>>(questions);
         }
     }
 }

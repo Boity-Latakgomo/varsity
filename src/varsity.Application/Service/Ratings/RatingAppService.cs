@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using varsity.Domain;
 using varsity.Service.Answers;
 using varsity.Service.Dto_s;
+using Microsoft.EntityFrameworkCore;
 
 namespace varsity.Service.Ratings
 {
@@ -31,8 +32,14 @@ namespace varsity.Service.Ratings
 
         public async Task<RatingDto> CreateAsync(RatingDto input)
         {
+            var user = AbpSession;
+            if (user == null)
+            {
+            }
+            var person = await _personRepository.GetAllIncluding(m => m.User).FirstOrDefaultAsync(x => x.User.Id == user.UserId);
+
             var rating = ObjectMapper.Map<Rating>(input);
-            rating.Person = await _personRepository.GetAsync((Guid)input.PersonId);
+            rating.Person = await _personRepository.GetAsync(person.Id);
             rating.Answer = await _answerRepository.GetAsync((Guid)input.AnswerId);
             await _repository.InsertAsync(rating);
             CurrentUnitOfWork.SaveChanges();

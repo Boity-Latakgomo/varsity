@@ -52,12 +52,12 @@ namespace varsity.Service.BookMark
         public async Task<List<BookmarkDto>> GetAllBookmarkAsync(Guid PersonId)
         {
             var bookmarks = await _bookmarkRepository
-                .GetAll()
-                .Include(b => b.Person)
-                .Include(b => b.Answer)
-                .Include(b => b.Question)
-                .Where(b => b.Person.Id == PersonId)
-                .ToListAsync();
+        .GetAll()
+        .Include(b => b.Person)
+        .Include(b => b.Answer)
+            .ThenInclude(a => a.Question)
+        .Where(b => b.Person.Id == PersonId)
+        .ToListAsync();
 
             var bookmarkDtos = ObjectMapper.Map<List<BookmarkDto>>(bookmarks);
             return bookmarkDtos;
@@ -66,17 +66,6 @@ namespace varsity.Service.BookMark
         [HttpDelete]
         public async Task DeleteBookmark(Guid BookmarkId)
         {
-
-            //var bookmarkSelected = await _bookmarkRepository.FirstOrDefaultAsync(pm => pm.Id == BookmarkId);
-
-            //if (bookmarkSelected != null)
-            //{
-            //    await _bookmarkRepository.DeleteAsync(bookmarkSelected);
-            //}
-            //else
-            //{
-            //    throw new ApplicationException("bookmarkSelected not found.");
-            //}
             await _bookmarkRepository.DeleteAsync(BookmarkId);
         }
 

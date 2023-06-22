@@ -2,6 +2,7 @@
 using Abp.Domain.Repositories;
 using Abp.IdentityFramework;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 using varsity.Authorization.Users;
 using varsity.Domain;
 using varsity.Service.Dto_s;
+using varsity.Service.Students;
 
 namespace varsity.Service.Student_s
 {
@@ -31,7 +33,7 @@ namespace varsity.Service.Student_s
 
         public async Task<StudentDto> CreateAsync(StudentDto input)
         {
-            var specificStudent =  _studentPoolRepository.FirstOrDefault(s => s.StudentNumber == input.StudentNumber);
+            var specificStudent =  _studentPoolRepository.FirstOrDefault(s => s.StudentNumber == input.UserName);
 
             if (specificStudent == null)
             {
@@ -45,6 +47,34 @@ namespace varsity.Service.Student_s
             
 
             return ObjectMapper.Map<StudentDto>( await _studentRepository.InsertAsync(student));
+        }
+
+        public async Task<StudentOutputDto> GetStudentLoggedInAsync()
+        {
+            var userId = AbpSession.UserId;
+            if (userId == null)
+            {
+                throw new ApplicationException("User not logged in");
+            }
+
+            var student = await _studentRepository.GetAllIncluding(s => s.Course, u => u.User).FirstOrDefaultAsync(s => s.User.Id == userId);
+
+            if (student == null)
+            {
+                throw new ApplicationException("Student not found");
+            }
+
+
+            var course = await _courseRepository.FirstOrDefaultAsync(student.Course.Id);
+            if (course == null)
+            {
+                throw new ApplicationException("Course not found");
+            }
+
+            var studentOutputDto = ObjectMapper.Map<StudentOutputDto>(student);
+            studentOutputDto.CourseId = course.Id;
+
+            return studentOutputDto;
         }
 
         private async Task<User> CreateUser(StudentDto input)

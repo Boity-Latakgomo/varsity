@@ -1874,6 +1874,9 @@ namespace varsity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("AcademicYear")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
@@ -1964,9 +1967,6 @@ namespace varsity.Migrations
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
 
                     b.Property<long?>("DeleterUserId")
                         .HasColumnType("bigint");
@@ -2325,12 +2325,6 @@ namespace varsity.Migrations
                 {
                     b.HasBaseType("varsity.Domain.Person");
 
-                    b.Property<string>("LecturerNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Qualification")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasDiscriminator().HasValue("Lecturer");
                 });
 
@@ -2343,9 +2337,6 @@ namespace varsity.Migrations
 
                     b.Property<Guid?>("CourseId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("StudentNumber")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasIndex("CourseId");
 

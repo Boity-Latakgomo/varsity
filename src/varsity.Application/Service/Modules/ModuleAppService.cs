@@ -71,6 +71,15 @@ namespace varsity.Service.Modules
             return ObjectMapper.Map<ModuleDto>(module);
         }
 
+        public async Task<List<ModuleDto>> GetModulesByCourseIdAsync(Guid courseId)
+        {
+            var modules = await _repository.GetAllIncluding(m => m.Course)
+                .Where(m => m.Course.Id == courseId)
+                .ToListAsync();
+
+            return ObjectMapper.Map<List<ModuleDto>>(modules);
+        }
+
         public Task<ModuleDto> UpdateAsync(ModuleDto input)
         {
             throw new NotImplementedException();

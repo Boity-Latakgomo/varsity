@@ -10,11 +10,15 @@ using varsity.Domain;
 namespace varsity.Service.Dto_s
 {
     [AutoMap(typeof(Answer))]
-    public class AnswerDto: EntityDto<Guid>
+    public class AnswerDto: FullAuditedEntityDto<Guid>
     {
         public Guid? QuestionId { get; set; }
         public string Text { get; set; }
         public Guid? PersonId { get; set; }
+        public string PersonName { get; set; }
         public string QuestionText { get; set; }
+        public long RatingCount { get; set; }
+
+
     }
 }

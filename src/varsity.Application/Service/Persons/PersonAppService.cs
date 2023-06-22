@@ -43,6 +43,8 @@ namespace varsity.Service.Person_s
         [HttpGet]
         public async Task<PersonDto> GetAsync(Guid id)
         {
+            
+
             var query = _PersonRepository.GetAllIncluding(m => m.User).FirstOrDefault(x => x.Id == id);
             return ObjectMapper.Map<PersonDto>(query);
         }

@@ -12,9 +12,6 @@ namespace varsity.Service.Dto_s
     [AutoMap(typeof(Lecturer))]
     public class LecturerDto: PersonDto
     {
-        public string LecturerNumber { get; set; }
 
-        // public virtual string EmployeeName { get; set;}
-        public string Qualification { get; set; }
     }
 }

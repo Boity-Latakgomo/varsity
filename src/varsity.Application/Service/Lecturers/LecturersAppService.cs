@@ -32,7 +32,7 @@ namespace varsity.Service.Lecturers
 
         public async Task<LecturerDto> CreateAsync(LecturerDto input)
         {
-            var specificLecturer = _lecturerPoolRepository.FirstOrDefault(s => s.LecturerNumber == input.LecturerNumber);
+            var specificLecturer = _lecturerPoolRepository.FirstOrDefault(s => s.LecturerNumber == input.UserName);
 
             if (specificLecturer == null)
             {

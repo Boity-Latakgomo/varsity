@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using varsity.Authorization.Users;
 using varsity.Domain;
 using varsity.Service.Dto_s;
+using varsity.Service.Students;
 
 namespace varsity.Service.Student_s
 {
@@ -14,8 +15,8 @@ namespace varsity.Service.Student_s
     {
         public StudentMapProfile()
         {
-            CreateMap<Student, StudentDto>()
-                .ForMember(x => x.UserId, m => m.MapFrom(x => x.User != null ? x.User.Id : (long?)null))
+            CreateMap<Student, StudentOutputDto>()
+                .ForMember(x => x.UserName, m => m.MapFrom(x => x.User != null ? x.User.UserName :null))
                 .ForMember(x => x.CourseId, m => m.MapFrom(x => x.Course != null ? x.Course.Id : (Guid?)null));
 
             CreateMap<StudentDto, User>()

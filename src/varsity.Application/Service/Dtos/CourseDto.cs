@@ -11,6 +11,7 @@ namespace varsity.Service.Dto_s
 {
     [AutoMap(typeof(Course))]
     public class CourseDto: EntityDto<Guid>
+
     {
         public string Name { get; set; }
         public Guid? DepartmentId { get; set; }

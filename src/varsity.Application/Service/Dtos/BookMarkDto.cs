@@ -17,5 +17,10 @@ namespace varsity.Service.Dto_s
         public Guid QuestionId { get; set; }
         public Guid AnswerId { get; set; }
         public RefListBookmarkType Type { get; set; }
+        public string AnswerText { get; set; }
+        public string AnswerQuestionText { get; set; }
+        public string QuestionText { get; set; }
+
+
     }
 }
