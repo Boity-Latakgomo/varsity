@@ -31,6 +31,9 @@ namespace varsity.Service.Person_s
         }
         //Your Custom Methods
         [HttpPost]
+        //a method named CreateAsync that creates a new Person entity based on the data provided in a PersonDto object. 
+        ////when i create a person ,it will return the personDto properties
+        ///The method is defined as an asynchronous task (Task<PersonDto>), indicating that it returns a PersonDto wrapped in a Task object.
         public async Task<PersonDto> CreateAsync(PersonDto input)
         {
             var person = ObjectMapper.Map<Person>(input);

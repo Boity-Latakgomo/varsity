@@ -18,6 +18,9 @@ namespace varsity.Domain
         public virtual string Password { get; set; }
         public virtual Course Course { get; set; }
 
+        /// <summary>
+        /// this user is for Abp session which comes from Application Service
+        /// </summary>
         public virtual User User { get; set; }
         
         [NotMapped]
