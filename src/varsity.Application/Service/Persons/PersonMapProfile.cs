@@ -26,7 +26,7 @@ namespace varsity.Service.Person_s
                 .ForMember(x => x.Surname, m => m.MapFrom(x => x.Surname))
                 .ForMember(x => x.UserName, m => m.MapFrom(x => x.Name + x.Surname.Substring(0, 4)));
 
-            CreateMap<PersonDto, User>()
+            CreateMap<User, PersonDto>()
                 .ForMember(e => e.Id, d => d.Ignore());
 
             CreateMap<PersonDto, Person>()

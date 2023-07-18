@@ -35,7 +35,7 @@ namespace varsity.Service.Questions
                 throw new ApplicationException("User invalid");
             }
             var person = await _personRepository.FirstOrDefaultAsync(p => p.User.Id == userId);
-            if (userId == null)
+            if (person == null)
             {
                 throw new ApplicationException("Person invalid");
             }

@@ -12,7 +12,7 @@ namespace varsity.Service.Dto_s
     [AutoMap(typeof(Student))]
     public class StudentDto : PersonDto
     {
-        public Guid CourseId { get; set; }
+        
         public int AcademicYear { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Abp.Dependency;
 using Abp.Domain.Repositories;
 using AutoMapper.Internal.Mappers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +29,19 @@ namespace varsity.Service.StoredFileService
 
         public async Task<StoredFileDto> UploadFile([FromForm] StoredFileDto form)
         {
+            var userId = AbpSession.UserId;
+            if (userId == null)
+            {
+                throw new ApplicationException("User invalid");
+            }
+            var person = await _lecturerRepository.FirstOrDefaultAsync(p => p.User.Id == userId);
+            if (person == null)
+            {
+                throw new ApplicationException("Person invalid");
+            }
+
+            form.LecturerId = person.Id;
+
             var service = IocManager.Instance.Resolve<IRepository<StoredFile, Guid>>();
             byte[] fileBytes = null;
             using (var ms = new MemoryStream())
@@ -45,13 +59,13 @@ namespace varsity.Service.StoredFileService
                 FileType = form.File.ContentType,
             };
 
-            file.Lecturer = lecturer;
+            file.Lecturer = person;
 
             file = await service.InsertAsync(file);
             var result = ObjectMapper.Map<StoredFileDto>(file);
             return result;
         }
-
+        [HttpGet]
         public async Task<IActionResult> DownloadFile(Guid fileId)
         {
             var service = IocManager.Instance.Resolve<IRepository<StoredFile, Guid>>();
@@ -72,9 +86,14 @@ namespace varsity.Service.StoredFileService
             return new FileStreamResult(stream, contentType) { FileDownloadName = file.Name };
         }
 
+        public async Task Delete(Guid id)
+        {
+            await _storedFileRepository.DeleteAsync(id);
+        }
+
         public async Task<List<StoredFileDto>> GetFilesByApplicantId()
         {
-            var files = await _storedFileRepository.GetAllListAsync();
+            var files = await _storedFileRepository.GetAllIncluding(f => f.Lecturer).ToListAsync();
             var result = ObjectMapper.Map<List<StoredFileDto>>(files);
             return result;
         }

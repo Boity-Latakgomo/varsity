@@ -12,7 +12,7 @@ namespace varsity.Service.Answers
     public interface IAnswerAppService : IApplicationService
     {
         Task<AnswerDto> CreateAsync(AnswerDto input);
-       Task<AnswerDto> UpdateAsync(AnswerDto input);
+       Task UpdateAsync(AnswerDto input);
         Task<PagedResultDto<AnswerDto>> GetAllAsync(PagedAndSortedResultRequestDto input);
         //Task<AnswerDto> GetAsync(Guid id);
        Task DeleteAsync(Guid id);

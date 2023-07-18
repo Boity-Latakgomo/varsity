@@ -180,10 +180,16 @@ namespace varsity.Service.Answers
 
             return answerDto;
         }
-
-        public Task<AnswerDto> UpdateAsync(AnswerDto input)
+        public async Task UpdateAsync(AnswerDto input)
         {
-            throw new NotImplementedException();
+            var answer = await _repository.GetAsync(input.Id);
+            ObjectMapper.Map(input, answer);
+            await _repository.UpdateAsync(answer);
+            
+            
         }
+
+
+
     }
 }

@@ -12,7 +12,7 @@ namespace varsity.Domain
     [DiscriminatorValue("Arf.Employee")]
     public class Student : Person
     {
-        public virtual Course Course { get; set;}
+        
         public virtual int AcademicYear { get; set; }
     }
 }

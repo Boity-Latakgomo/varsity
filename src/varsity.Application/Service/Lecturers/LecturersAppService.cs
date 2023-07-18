@@ -20,14 +20,18 @@ namespace varsity.Service.Lecturers
     public class LecturerAppService : ApplicationService, ILecturersAppService
     {
         private readonly IRepository<Lecturer, Guid> _lecturerRepository;
+        private readonly IRepository<Course, Guid> _courseRepository;
         private readonly IRepository<LecturerPool, Guid> _lecturerPoolRepository;
         private readonly UserManager _userManager;
+        
 
-        public LecturerAppService(IRepository<Lecturer, Guid> lecturerRepository, UserManager userManager, IRepository<LecturerPool, Guid> lecturerPoolRepository)
+        public LecturerAppService(IRepository<Lecturer, Guid> lecturerRepository, UserManager userManager, IRepository<LecturerPool, Guid> lecturerPoolRepository, IRepository<Course, Guid> courseRepository)
         {
             _lecturerRepository = lecturerRepository;
+            _courseRepository = courseRepository;
             _lecturerPoolRepository = lecturerPoolRepository;
             _userManager = userManager;
+            
         }
 
         public async Task<LecturerDto> CreateAsync(LecturerDto input)
@@ -40,6 +44,7 @@ namespace varsity.Service.Lecturers
             }
             var lecturer = ObjectMapper.Map<Lecturer>(input);
             lecturer.User = await CreateUser(input);//creating a user before creating a student
+            lecturer.Course = await _courseRepository.GetAsync(input.CourseId);
             return ObjectMapper.Map<LecturerDto>(await _lecturerRepository.InsertAsync(lecturer));
         }
 

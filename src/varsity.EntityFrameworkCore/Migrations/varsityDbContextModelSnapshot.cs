@@ -1962,6 +1962,9 @@ namespace varsity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
@@ -2012,6 +2015,8 @@ namespace varsity.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
 
                     b.HasIndex("UserId");
 
@@ -2335,11 +2340,6 @@ namespace varsity.Migrations
                     b.Property<int>("AcademicYear")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("CourseId");
-
                     b.HasDiscriminator().HasValue("Student");
                 });
 
@@ -2621,9 +2621,15 @@ namespace varsity.Migrations
 
             modelBuilder.Entity("varsity.Domain.Person", b =>
                 {
+                    b.HasOne("varsity.Domain.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId");
+
                     b.HasOne("varsity.Authorization.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Course");
 
                     b.Navigation("User");
                 });
@@ -2727,15 +2733,6 @@ namespace varsity.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("varsity.Domain.Student", b =>
-                {
-                    b.HasOne("varsity.Domain.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId");
-
-                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("Abp.DynamicEntityProperties.DynamicProperty", b =>

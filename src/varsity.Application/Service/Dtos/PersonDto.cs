@@ -17,6 +17,7 @@ namespace varsity.Service.Dto_s
         public string PhoneNumber { get; set; }
         public string EmailAddress { get; set; }
         public  string Password { get; set; }
+        public Guid CourseId { get; set; }
         public  long UserId { get; set; }
         public  string[] RoleNames { get; set; }
     }

@@ -12,6 +12,7 @@ namespace varsity.Service.Dto_s
     [AutoMap(typeof(Lecturer))]
     public class LecturerDto: PersonDto
     {
+       
 
     }
 }
