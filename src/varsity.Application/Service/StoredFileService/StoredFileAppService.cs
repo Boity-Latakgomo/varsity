@@ -27,7 +27,6 @@ namespace varsity.Service.StoredFileService
             _storedFileRepository = storedFileRepository;
            
         }
-
         public async Task<StoredFileDto> UploadFile([FromForm] StoredFileDto form)
         {
             var userId = AbpSession.UserId;
@@ -50,7 +49,6 @@ namespace varsity.Service.StoredFileService
                 await form.File.CopyToAsync(ms);
                 fileBytes = ms.ToArray();
             }
-
             var lecturer = await _lecturerRepository.FirstOrDefaultAsync(form.LecturerId);
 
             var file = new StoredFile
@@ -78,7 +76,7 @@ namespace varsity.Service.StoredFileService
             }
 
             var stream = new MemoryStream(file.Data);
-
+            
             stream.Position = 0;
 
             var contentType = file.FileType;
